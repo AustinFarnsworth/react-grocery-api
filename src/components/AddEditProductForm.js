@@ -7,7 +7,7 @@ function AddEditProductForm({
   handleCreateProduct,
   existingProduct,
   handleUpdateProduct,
-  handleDeleteProduct
+  handleDeleteProduct,
 }) {
   const [name, setName] = React.useState(
     existingProduct ? existingProduct.name : ""
@@ -113,13 +113,13 @@ function AddEditProductForm({
         </button>
       </form>
       <button onClick={handleCloseModal}>CLOSE</button>
-      {existingProduct ? 
-        <button onClick={() => handleDeleteProduct(existingProduct)}>  
+      {existingProduct ? (
+        <button onClick={() => handleDeleteProduct(existingProduct)}>
           DELETE
         </button>
-      ) : null
+      ) : null}
     </div>
   );
-      }
+}
 
 export default AddEditProductForm;

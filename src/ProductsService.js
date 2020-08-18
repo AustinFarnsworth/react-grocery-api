@@ -1,7 +1,8 @@
 import axios from "axios";
 // install axios 'npm install axios'
 // URL for our node express running locally
-const BASE_URL = "http://localhost:3005";
+// const BASE_URL = "http://localhost:3005";
+const BASE_URL = "https://grocery-api-austin.herokuapp.com";
 
 const getProducts = () => {
   return axios.get(`${BASE_URL}/api/products`);
