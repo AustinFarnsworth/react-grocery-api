@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import ProductGrid from "./components/ProductGrid";
+import LoadingSpinner from "./components/LoadingSpinner";
 import {
   getProducts,
   createProduct,
@@ -11,24 +12,50 @@ import Modal from "./components/Modal";
 import AddEditProductForm from "./components/AddEditProductForm";
 
 function App() {
-  const [products, setProducts] = React.useState(() => {
-    fetchProducts();
-
-    return [];
-  });
   const [
     isShowingAddEditProductModal,
     setIsShowingAddEditProductModal,
   ] = React.useState(false);
   const [currentProduct, setCurrentProduct] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [originalProducts, setOriginalProducts] = React.useState([]);
+  const [products, setProducts] = React.useState(() => {
+    fetchProducts();
+
+    return [];
+  });
+
+  const [searchQuery, setSearchQuery] = React.useState("");
+  React.useEffect(() => {
+    if (!searchQuery) {
+      setProducts(originalProducts);
+      return;
+    }
+    const filteredProducts = originalProducts.filter((product) => {
+      const searchQueryLowerCase = searchQuery.toLowerCase();
+      const productNameLowerCase = product.name.toLowerCase();
+
+      if (productNameLowerCase.includes(searchQueryLowerCase)) {
+        return true;
+      }
+    });
+
+    setProducts(filteredProducts);
+  }, [searchQuery]);
 
   function fetchProducts() {
+    setIsLoading(true);
+
     getProducts()
       .then((response) => {
+        setOriginalProducts(response.data);
         setProducts(response.data);
       })
       .catch((error) => {
         debugger;
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -98,9 +125,18 @@ function App() {
       ) : null}
 
       <h1>React Grocery App</h1>
+      <input
+        type="text"
+        className="search-input"
+        value={searchQuery}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+        }}
+      />
+      {isLoading ? <LoadingSpinner /> : null}
       <ProductGrid products={products} handleEditProduct={handleEditProduct} />
+      {!isLoading && products.length === 0 ? <h3>No Results Found</h3> : null}
     </div>
   );
 }
-
 export default App;
