@@ -8,6 +8,10 @@ const getProducts = () => {
   return axios.get(`${BASE_URL}/api/products`);
 };
 
+const getProduct = (productId) => {
+  return axios.get(`${BASE_URL}/api/products/${productId}`);
+};
+
 const createProduct = (product) => {
   return axios.post(`${BASE_URL}/api/products`, product);
 };
@@ -20,4 +24,4 @@ const deleteProduct = (productId) => {
   return axios.delete(`${BASE_URL}/api/products/${productId}`);
 };
 
-export { getProducts, createProduct, updateProduct, deleteProduct };
+export { getProducts, getProduct, createProduct, updateProduct, deleteProduct };
